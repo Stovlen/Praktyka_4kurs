@@ -19,33 +19,25 @@ pool
   .catch((err) => console.error("❌ Помилка підключення:", err));
 
 // 📌 1️⃣ Отримання інформації про обладнання + запис перегляду
-app.get("/api/equipment/:qrCode", async (req, res) => {
-  const { qrCode } = req.params;
-  const userIp = req.ip;
+app.get("/api/equipment/:id", async (req, res) => {
+  const { id } = req.params;
 
   try {
-    const { rows } = await pool.query(
-      "SELECT * FROM equipment WHERE qr_code = $1",
-      [qrCode]
-    );
+    const { rows } = await pool.query("SELECT * FROM equipment WHERE id = $1", [
+      id,
+    ]);
 
     if (rows.length === 0) {
       return res.status(404).json({ message: "Обладнання не знайдено" });
     }
 
-    const equipment = rows[0];
-
-    await pool.query(
-      "INSERT INTO equipment_views (equipment_id, user_ip, viewed_at) VALUES ($1, $2, NOW())",
-      [equipment.id, userIp]
-    );
-
-    res.json(equipment);
+    res.json(rows[0]);
   } catch (err) {
     console.error("❌ Помилка отримання обладнання:", err);
     res.status(500).json({ message: "Помилка сервера" });
   }
 });
+
 
 // 📌 2️⃣ Генерація QR-коду
 app.get("/generate-qr/:id", async (req, res) => {
