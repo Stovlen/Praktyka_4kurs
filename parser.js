@@ -45,11 +45,11 @@ async function fetchEquipmentList(page = 1, equipmentList = []) {
     if (nextPageExists) {
       return fetchEquipmentList(page + 1, equipmentList); // Парсимо наступну сторінку
     } else {
-      console.log("✅ Завершено парсинг усіх сторінок.");
+      console.log("Завершено парсинг усіх сторінок.");
       return equipmentList;
     }
   } catch (error) {
-    console.error(`❌ Помилка парсингу на сторінці ${page}:`, error.message);
+    console.error(`Помилка парсингу на сторінці ${page}:`, error.message);
     return equipmentList;
   }
 }
@@ -62,9 +62,9 @@ async function saveToDatabase(equipmentList) {
         [equipment.name, equipment.url]
       );
     }
-    console.log("✅ Дані успішно збережені у PostgreSQL");
+    console.log("Дані успішно збережені у PostgreSQL");
   } catch (error) {
-    console.error("❌ Помилка збереження у базу:", error.message);
+    console.error("Помилка збереження у базу:", error.message);
   } finally {
     pool.end();
   }
