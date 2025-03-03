@@ -15,7 +15,7 @@ const pool = new Pool({
 async function fetchEquipmentList(page = 1, equipmentList = []) {
   try {
     const pageUrl = page === 1 ? BASE_URL : `${BASE_URL}page/${page}/`;
-    console.log(`🔄 Парсимо сторінку: ${pageUrl}`);
+    console.log(`Парсимо сторінку: ${pageUrl}`);
 
     const { data } = await axios.get(pageUrl);
     const $ = cheerio.load(data);

@@ -15,10 +15,10 @@ const pool = new Pool({
 
 pool
   .connect()
-  .then(() => console.log("✅ Підключено до PostgreSQL"))
-  .catch((err) => console.error("❌ Помилка підключення:", err));
+  .then(() => console.log("Підключено до PostgreSQL"))
+  .catch((err) => console.error("Помилка підключення:", err));
 
-// 📌 1️⃣ Отримання інформації про обладнання + запис перегляду
+// Отримання інформації про обладнання + запис перегляду
 app.get("/api/equipment/:id", async (req, res) => {
   const { id } = req.params;
 
@@ -33,23 +33,16 @@ app.get("/api/equipment/:id", async (req, res) => {
 
     let equipment = rows[0];
 
-    // Видаляємо ключі, які мають значення null
-    Object.keys(equipment).forEach((key) => {
-      if (equipment[key] === null) {
-        delete equipment[key];
-      }
-    });
-
     res.json(equipment);
   } catch (err) {
-    console.error("❌ Помилка отримання обладнання:", err);
+    console.error("Помилка отримання обладнання:", err);
     res.status(500).json({ message: "Помилка сервера" });
   }
 });
 
 
 
-// 📌 2️⃣ Генерація QR-коду
+// Генерація QR-коду
 app.get("/generate-qr/:id", async (req, res) => {
   const { id } = req.params;
 
@@ -74,12 +67,12 @@ app.get("/generate-qr/:id", async (req, res) => {
 
     res.sendFile(qrPath);
   } catch (error) {
-    console.error("❌ Помилка генерації QR-коду:", error);
+    console.error("Помилка генерації QR-коду:", error);
     res.status(500).json({ message: "Помилка сервера" });
   }
 });
 
-// 📌 3️⃣ Логування переглядів через окремий маршрут
+// Логування переглядів через окремий маршрут
 app.get("/track-view/:id", async (req, res) => {
   const { id } = req.params;
   const userIp = req.ip;
@@ -92,12 +85,12 @@ app.get("/track-view/:id", async (req, res) => {
 
     res.redirect(`/api/equipment/${id}`); // Перенаправлення на деталі обладнання
   } catch (error) {
-    console.error("❌ Помилка запису перегляду:", error);
+    console.error("Помилка запису перегляду:", error);
     res.status(500).json({ message: "Помилка сервера" });
   }
 });
 
-// 📌 4️⃣ Отримання всіх переглядів обладнання
+// Отримання всіх переглядів обладнання
 app.get("/api/equipment-views", async (req, res) => {
   try {
     const { rows } = await pool.query(
@@ -105,11 +98,11 @@ app.get("/api/equipment-views", async (req, res) => {
     );
     res.json(rows);
   } catch (error) {
-    console.error("❌ Помилка отримання переглядів:", error);
+    console.error("Помилка отримання переглядів:", error);
     res.status(500).json({ message: "Помилка сервера" });
   }
 });
 
-// 📌 5️⃣ Запуск сервера
+// Запуск сервера
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`🚀 Сервер запущено на порту ${PORT}`));
+app.listen(PORT, () => console.log(`Сервер запущено на порту ${PORT}`));
