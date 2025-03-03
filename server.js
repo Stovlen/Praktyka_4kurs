@@ -31,12 +31,22 @@ app.get("/api/equipment/:id", async (req, res) => {
       return res.status(404).json({ message: "Обладнання не знайдено" });
     }
 
-    res.json(rows[0]);
+    let equipment = rows[0];
+
+    // Видаляємо ключі, які мають значення null
+    Object.keys(equipment).forEach((key) => {
+      if (equipment[key] === null) {
+        delete equipment[key];
+      }
+    });
+
+    res.json(equipment);
   } catch (err) {
     console.error("❌ Помилка отримання обладнання:", err);
     res.status(500).json({ message: "Помилка сервера" });
   }
 });
+
 
 
 // 📌 2️⃣ Генерація QR-коду
